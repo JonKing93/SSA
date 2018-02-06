@@ -52,7 +52,7 @@ surrVals = NaN(MC, M);
 % Initialize the parallel pool if computing in parallel
 nWorkers = 1;
 if parallel
-    fprintf('Activating parallel pool. This may take a few minutes...');
+    fprintf('Activating parallel pool...');
     pool = gcp;
     fprintf( sprintf('Activation complete. \r\n') );
     nWorkers = pool.NumWorkers;
