@@ -65,7 +65,7 @@ end
 function[M, N] = setup(singVecs, T, algorithm)
 
 % Ensure inputs are matrices
-if ~ismatrix(singVecs) || ~ismatrix(T) || hasNaN(singVecs) || hasNaN(T)
+if ~ismatrix(singVecs) || ~ismatrix(T) || any(isnan(singVecs(:))) || any(isnan(T(:)))
     error('singVecs and T must be matrices and cannot contain NaN');
 end
 
