@@ -44,7 +44,7 @@ function[surrVals] = MC_SSA(ts, M, algorithm, singVecs, MC, noise, varargin)
 % surrVals: The matrix of surrogate singular values
 
 % Parse inputs. Error Check. Setup.
-[parallel, showProgress, estimateRuntime] = setup(varargin{:});
+[parallel, showProgress, estimateRuntime] = setup(ts, MC, varargin{:});
 
 % Preallocate surrogate singular values
 surrVals = NaN(MC, M);
@@ -97,15 +97,15 @@ end
 
 
 %%%%% Helper functions %%%%%%
-function[parallel, showProgress, estimateRuntime] = setup( varargin)
+function[parallel, showProgress, estimateRuntime] = setup(ts, MC, varargin)
 
 % Parse the optional inputs
 [parallel, showProgress, estimateRuntime] = parseInputs( varargin, ...
 {'parallel','showProgress','estimateRuntime'},{false, false, false},{'b','b','b'} );
 
 % Ensure tsm0 is a vector
-if ~isvector(tsm0)
-    error('tsm0 must be a vector');
+if ~isvector(ts)
+    error('ts must be a vector');
 end
 
 % Ensure MC is positive
@@ -132,7 +132,7 @@ end
 function[surrVals] = mcssaStep(ts, M, algorithm, singVecs, noise)
 
 % Build a surrogate time series
-surr = randNoiseSeries(noise, ts);
+surr = randNoiseSeries(noise, ts, 1);
 
 % Get the covariance matrix
 [~,surrC] = getTandC( surr, M, algorithm);
