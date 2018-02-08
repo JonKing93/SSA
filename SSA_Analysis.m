@@ -146,23 +146,22 @@ s.RCs = getRCs( s.singVecs, s.T, algorithm);
 % If testing significance
 if sigTest
     % Generate the surrogate singular values
-    tic
-    [s.surrVals] = MC_SSA(ts, M, algorithm, s.singVecs, mcssaArgs{:} );
-    toc
+    s.surrVals = MC_SSA(ts, M, algorithm, s.singVecs, mcssaArgs{:} );
     
     % Get the upper level of the 2-tailed significance test
     p2tail = p/2;
     
     % Do a significance test using the surrogate singular values
-    [sigThreshold, s.sig_p] = mcSigThreshold( s.surrVals, p2tail);
+    [sigThreshold, sig_p] = mcSigThreshold( s.surrVals, p2tail);
     s.sigThreshold = permute( sigThreshold, [2,1,3]);
+    s.sig_p = sig_p*2;
     
     % Get the indices of significant singular values
     s.isSigVal = squeeze( s.singVals >= s.sigThreshold );
         
     % Record Monte Carlo convergence data
     if convergeTest
-        [s.MCsigThresh, s.MC_p] = mcSigThreshold(s.surrVals, p2tail, 'convergeTest');
+        [s.MCsigThresh, s.MC_p] = mcconvergence(s.surrVals, p2tail);
     end
 end
 
@@ -176,11 +175,11 @@ if sigTest
     s.metadata(3:5,1:2) = [{'MC';'noise';'p'}, {mcssaArgs{1};mcssaArgs{2};p}];
 end
 
-% Make plots if desired
-if plotting
-    ssaconvergence(s);
-    ssasignificance(s);
-end
+% % Make plots if desired
+% if plotting
+%     ssaconvergence(s);
+%     ssasignificance(s);
+% end
 
 end
 

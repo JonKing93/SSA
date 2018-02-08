@@ -52,9 +52,7 @@ surrVals = NaN(MC, M);
 % Initialize the parallel pool if computing in parallel
 nWorkers = 1;
 if parallel
-    fprintf('Activating parallel pool...');
     pool = gcp;
-    fprintf( sprintf('Activation complete. \r\n') );
     nWorkers = pool.NumWorkers;
 end
 
@@ -71,6 +69,7 @@ surrVals(1,:) = mcssaStep( ts, M, algorithm, singVecs, noise );
 if estimateRuntime
     time = toc(startTime);
     time = time*MC/nWorkers;
+    h = time / 360;
     m = mod(time,360)/60;
     s = mod(time,60);
     fprintf('Estimated runtime: %0.f hour(s), %0.f minute(s), %0.f seconds \r\n',h,m,s);
@@ -85,11 +84,11 @@ if parallel             % In parallel
 else                    % In serial
     for k = 2:MC
         surrVals(k,:) = mcssaStep( ts, M, algorithm, singVecs, noise );
-    end
-    
-    % Update progress bar if displaying
-    if showProgress
-        progressbar(k/MC);
+        
+        % Update progress bar if displaying
+        if showProgress
+            progressbar(k/MC);
+        end
     end
 end
 
