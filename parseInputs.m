@@ -6,7 +6,7 @@ function[varargout] = parseInputs( inArgs, flags, defaults, switches )
 %
 % ----- Inputs -----
 %
-% inArgs: typically, varargin for a function call
+% inArgs: typically, varargin{:} for a function calla
 %
 % flags: All the possible string flags
 %
