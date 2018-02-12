@@ -89,7 +89,9 @@ end
 N = length(tsm0);
 
 % Check that the window size is positive
-if M < 0
+if ~isscalar(M)
+    error('M must be a scalar integer');
+elseif M < 0
     error('M must be positive');
 elseif mod(M,1) ~= 0
     error('M must be an integer');
